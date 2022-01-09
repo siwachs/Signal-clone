@@ -13,7 +13,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Avatar } from "react-native-elements/dist/avatar/Avatar";
-import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
+import {Ionicons, FontAwesome } from "@expo/vector-icons";
+// import {AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { auth, db } from "../../../config/firebase";
 import {
@@ -35,22 +36,25 @@ const ChatScreen = ({ navigation, route }) => {
       title: "Chat",
       headerTitleAlign: "left",
       headerBackTitleVisible: false,
-      headerLeft: () => (
-        <TouchableOpacity
-          style={{ marginLeft: 10 }}
-          onPress={() => navigation.goBack()}
-        >
-          <AntDesign name="arrowleft" size={24} color={"white"}></AntDesign>
-        </TouchableOpacity>
-      ),
+      // headerLeft: () => (
+        // <TouchableOpacity
+        //   style={{ marginLeft: 10 }}
+        //   onPress={() => navigation.goBack()}
+        // >
+        //   <AntDesign
+        //     name="arrowleft"
+        //     size={24}
+        //     color={"white"}
+        //     behavior={Platform.OS == "ios"}
+        //   ></AntDesign>
+        // </TouchableOpacity>
+      // ),
       headerTitle: () => (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Avatar
             rounded
             source={{
-              uri:
-                messages[0]?.data.photoURL ||
-                "https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-1024.png",
+              uri: messages[0]?.data.photoURL,
             }}
           ></Avatar>
           <Text style={{ color: "white", marginLeft: 10, fontWeight: "700" }}>
@@ -141,8 +145,11 @@ const ChatScreen = ({ navigation, route }) => {
                         bottom: -15,
                         right: -5,
                       }}
-                      source={{ uri: data.photoURL }}
+                      source={{
+                        uri: data?.photoURL,
+                      }}
                     ></Avatar>
+
                     <Text style={styles.recieverText}>{data.message}</Text>
                   </View>
                 ) : (
@@ -156,9 +163,11 @@ const ChatScreen = ({ navigation, route }) => {
                       containerStyle={{
                         position: "absolute",
                         bottom: -15,
-                        left: -5,
+                        right: -5,
                       }}
-                      source={{ uri: data.photoURL }}
+                      source={{
+                        uri: data?.photoURL,
+                      }}
                     ></Avatar>
                     <Text style={styles.senderText}>{data.message}</Text>
                     <Text style={styles.senderName}>{data.displayName}</Text>

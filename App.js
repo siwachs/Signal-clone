@@ -40,7 +40,11 @@ export default function App() {
           name="addChat"
           component={addChatScreen}
         />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen
+          screenOptions={{}}
+          name="ChatScreen"
+          component={ChatScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

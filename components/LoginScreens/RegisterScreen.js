@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Button, Input, Text } from "react-native-elements";
@@ -19,39 +19,30 @@ const RegisterScreen = ({ navigation }) => {
   }, [navigation]);
 
   const Register = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email.trim(), password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
-        console.log("form create");
-        console.log(user);
-        // ...
         updateProfile(auth.currentUser, {
-          displayName: name,
+          displayName: name.trim(),
           photoURL: profileURL
             ? profileURL
-            : "https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-1024.png",
+            : "https://i.pinimg.com/280x280_RS/d9/52/83/d95283ea172e9c0f0029a2c54d9f18ba.jpg",
         })
-          .then(() => {
-            // Profile updated!
-            // ...
-            console.log("after update");
-            console.log(user);
-          })
+          .then(() => {})
           .catch((error) => {
-            // An error occurred
-            // ...
+            alert(error);
           });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        alert(error.message);
       });
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <StatusBar style="auto"></StatusBar>
       <Text h3 style={{ marginBottom: 50 }}>
         Create a Signal account
@@ -66,24 +57,29 @@ const RegisterScreen = ({ navigation }) => {
         ></Input>
         <Input
           placeholder="Email Address"
+          autoFocus
           type="email"
           value={email}
           onChangeText={(email) => setEmail(email)}
         ></Input>
         <Input
           placeholder="Password"
+          autoFocus
           secureTextEntry
           type="password"
           value={password}
           onChangeText={(password) => setPassword(password)}
         ></Input>
-        <Input
-          placeholder="Profile URL (optional)"
-          type="text"
-          value={profileURL}
-          onChangeText={(profileURL) => setProfileURL(profileURL)}
-          onSubmitEditing={Register}
-        ></Input>
+        <TouchableOpacity>
+          <Input
+            placeholder="Profile URL (optional)"
+            autoFocus
+            type="text"
+            value={profileURL}
+            onChangeText={(profileURL) => setProfileURL(profileURL)}
+            onSubmitEditing={Register}
+          ></Input>
+        </TouchableOpacity>
       </View>
       <Button raised onPress={Register} title="Register"></Button>
       <View style={{ height: 50 }}></View>

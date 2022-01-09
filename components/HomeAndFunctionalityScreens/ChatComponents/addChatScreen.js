@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { db } from "../../../config/firebase";
@@ -38,7 +38,11 @@ const addChatScreen = ({ navigation }) => {
           <Icon name="wechat" color={"black"} type="antdesign" size={24}></Icon>
         }
       ></Input>
-      <Button onPress={createChat} title="Create new chat"></Button>
+      <Button
+        disabled={!text}
+        onPress={createChat}
+        title="Create new chat"
+      ></Button>
     </View>
   );
 };

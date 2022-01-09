@@ -1,14 +1,14 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { Button, Input, Image } from "react-native-elements";
 import { KeyboardAvoidingView } from "react-native";
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
-  const EmailRef = useRef(null);
-  const PassRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -20,35 +20,40 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   const SignIn = () => {
-    signInWithEmailAndPassword(auth, EmailRef.current, PassRef.current)
+    signInWithEmailAndPassword(auth, email.trim(), password)
       .then((userCredential) => {
         const user = userCredential.user;
       })
       .catch((error) => {
-        alert(error.code);
         alert(error.message);
       });
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <StatusBar style="auto"></StatusBar>
       <Image
-        source={require("../../assets/img/T_logo.png")}
-        style={{ height: 200, width: 200 }}
+        source={require("../../assets/img/logo.png")}
+        style={{ height: 100, width: 300, marginBottom: 5 }}
       ></Image>
       <View style={styles.inputContainer}>
         <Input
           placeholder="Email Address"
           autoFocus
           type="email"
-          ref={EmailRef}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         ></Input>
         <Input
           placeholder="Password"
+          autoFocus
           secureTextEntry
           type="password"
-          ref={PassRef}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           onSubmitEditing={SignIn}
         ></Input>
       </View>
